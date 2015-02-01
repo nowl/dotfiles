@@ -139,6 +139,8 @@
 
 ;; (global-set-key (kbd "<C-tab>") 'slime-fuzzy-complete-symbol)
 
+(add-hook 'find-file-hook 'flymake-find-file-hook)
+
 (set-face-attribute 'default nil :font "DejaVu Sans Mono-11")
 
 ;; set default width and height
