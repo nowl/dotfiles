@@ -11,14 +11,25 @@
 	;		80 84 88 92 96 100))
 (global-set-key "\e#" 'calc-dispatch)
 (global-set-key [(f5)] 'kmacro-end-and-call-macro)
+(global-set-key (kbd "C-c C-a") 'comment-or-uncomment-region)
+
 
 ;; colors
 (set-foreground-color "white")
 (set-background-color "black")
 (set-cursor-color "white")
 
+;; melpa package index
+(require 'package)
+(package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+;; packages I like
+;;   color-theme
+;;   python-mode
+;;   magit
+
 ;; color-theme stuff
-(setq load-path (append load-path (list "~/.emacs.d/color-theme-6.6.0")))
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-clarity)
@@ -71,10 +82,7 @@
 
 (global-set-key (kbd "<C-return>") 'repeat)
 
-(setq load-path (append load-path (list "~/.emacs.d/")))
-
 ; python stuff
-(load "~/.emacs.d/pythonmode/python-mode-1.0/python-mode.elc")
 (defun my-python-mode-hook ()
   (setq tab-width 4)
   (setq indent-tabs-mode nil))
@@ -97,65 +105,44 @@
 (require 'org)
 (global-set-key "\C-ca" 'org-agenda)
 
-
-;; lua
-(setq auto-mode-alist (cons '("\\.lua$" . lua-mode) auto-mode-alist))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-
-(setq-default indent-tabs-mode nil)
-
-
-
-;; magit
-(add-to-list 'load-path "~/.emacs.d/magit")
-(require 'magit)
-
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "epylint" (list local-file))))
+;; (when (load "flymake" t)
+;;   (defun flymake-pylint-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace))
+;;            (local-file (file-relative-name
+;;                         temp-file
+;;                         (file-name-directory buffer-file-name))))
+;;       (list "epylint" (list local-file))))
   
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
-
-;; actionscript
-(setq auto-mode-alist (cons '("\\.as$" . actionscript-mode) auto-mode-alist))
-(autoload 'actionscript-mode "actionscript-mode-connors" "Actionscript mode." t)
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pylint-init)))
 
 ;; slime stuff
-(push "~/.emacs.d/slime/contrib" load-path)
-(add-hook 'slime-load-hook (lambda () 
-			     (require 'slime-fuzzy)))
-(push "~/.emacs.d/slime" load-path)
-(require 'slime)
-(add-hook 'lisp-mode-hook (lambda () (slime-mode t)
-				  (setq tab-width 4)
-				  (setq indent-tabs-mode nil)))
-(add-hook 'inferior-lisp-mode-hook (lambda () 
-				     ;(inferior-slime-mode t)
-				     (setq tab-width 4)
-				     (setq indent-tabs-mode nil)))
-(setf inferior-lisp-program "sbcl")
-;(setf inferior-lisp-program "java -cp /usr/share/clojure/clojure.jar:/usr/share/clojure/clojure-contrib.jar clojure.main")
-(setf lisp-indent-function 'common-lisp-indent-function
-      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-      slime-startup-animation nil)
-(slime-setup '(slime-fancy slime-asdf))
+;; (push "~/.emacs.d/slime/contrib" load-path)
+;; (add-hook 'slime-load-hook (lambda () 
+;; 			     (require 'slime-fuzzy)))
+;; (push "~/.emacs.d/slime" load-path)
+;; (require 'slime)
+;; (add-hook 'lisp-mode-hook (lambda () (slime-mode t)
+;; 				  (setq tab-width 4)
+;; 				  (setq indent-tabs-mode nil)))
+;; (add-hook 'inferior-lisp-mode-hook (lambda () 
+;; 				     ;(inferior-slime-mode t)
+;; 				     (setq tab-width 4)
+;; 				     (setq indent-tabs-mode nil)))
+;; (setf inferior-lisp-program "sbcl")
+;; ;(setf inferior-lisp-program "java -cp /usr/share/clojure/clojure.jar:/usr/share/clojure/clojure-contrib.jar clojure.main")
+;; (setf lisp-indent-function 'common-lisp-indent-function
+;;       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+;;       slime-startup-animation nil)
+;; (slime-setup '(slime-fancy slime-asdf))
 
-(global-set-key (kbd "<C-tab>") 'slime-fuzzy-complete-symbol)
+;; (global-set-key (kbd "<C-tab>") 'slime-fuzzy-complete-symbol)
 
-;; clojure-mode
-(add-to-list 'load-path "~/.emacs.d/clojure-mode")
-(setq auto-mode-alist (cons '("\\.clj$" . clojure-mode) auto-mode-alist))
-(autoload 'clojure-mode "clojure-mode" "Clojure mode." t)
+(set-face-attribute 'default nil :font "DejaVu Sans Mono-11")
 
-;; ;; swank-closure
-;; (add-to-list 'load-path "~/.emacs.d/swank-clojure")
-;; (setf swank-clojure-jar-path "/usr/share/clojure/clojure.jar"
-;;       swank-clojure-extra-classpaths '("/usr/share/clojure/clojure-contrib.jar"))
-;; ;;(setq swank-clojure-binary "~/bin/clojure")
-;; (require 'swank-clojure)
+;; set default width and height
+(if (window-system)
+    (progn
+      (set-frame-height (selected-frame) 54)
+      (set-frame-width (selected-frame) 100)))
