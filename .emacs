@@ -148,3 +148,7 @@
     (progn
       (set-frame-height (selected-frame) 54)
       (set-frame-width (selected-frame) 100)))
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-h a") 'helm-apropos)
